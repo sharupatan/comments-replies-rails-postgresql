@@ -10,6 +10,11 @@ class Comment < ApplicationRecord
     save
   end
 
+  def increment_likes
+    self.likes_count += 1
+    save
+  end
+
   private
 
   def initialize_replies

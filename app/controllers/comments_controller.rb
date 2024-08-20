@@ -5,7 +5,8 @@ class CommentsController < ApplicationController
     end
 
     def create
-        @comment = Comment.new(user_id: 1)
+        # here the user_id should be taken from the current user
+        @comment = Comment.new(comment_params)
         if @comment.save
             redirect_to comments_path, notice: 'Comment was successfully created.'
         else
@@ -16,6 +17,7 @@ class CommentsController < ApplicationController
 
     def reply
         @comment = Comment.find(params[:id])
+        # here the user_id should be taken from the current user
         @comment.add_reply(params[:reply_content], User.first.id)
         redirect_to comments_path
     end
@@ -23,6 +25,6 @@ class CommentsController < ApplicationController
     private
 
     def comment_params
-        params.permit(:user_id)
+        params.require(:comment).permit(:user_id, :title)
     end
 end

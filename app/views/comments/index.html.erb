@@ -1,25 +1,39 @@
-<h1>Comments</h1>
+<h1 class="text-center mb-5">Comments</h1>
 
-<%= form_with model: @new_comment, local: true do |form| %>
-  <%#= form.text_area :content, placeholder: "Write a comment..." %>
-  <%= form.hidden_field :user_id, value: 1 %> <!-- Assuming user ID is hardcoded for now -->
-  <%= form.submit "Add Comment" %>
-<% end %>
-
-<% @comments.each do |comment| %>
-  <div>
-    <p><strong><%= comment.user.name %>:</strong> <%= comment.id %></p>
-    
-    <%= form_with url: reply_comment_path(comment), method: :post, local: true do |form| %>
-      <%= form.text_area :reply_content, placeholder: "Write a reply..." %>
-      <%= form.hidden_field :user_id, value: 1 %> <!-- Assuming user ID is hardcoded for now -->
-      <%= form.submit "Reply" %>
+<div class="container m-auto text-center">
+    <%= form_with model: @new_comment, local: true do |form| %>
+        <%= form.text_area :title, placeholder: "Write a comment...", class: 'form-control' %>
+        <%= form.hidden_field :user_id, value: 1 %> <!-- Assuming user ID is hardcoded for now -->
+        <%= form.submit "Add Comment", class: 'btn btn-primary mt-2 mb-1' %>
     <% end %>
 
-    <% if comment.replies.present? %>
-      <% comment.replies.each do |reply| %>
-        <p style="margin-left: 20px;"><strong><%= User.find(comment.user_id).name %>:</strong> <%= reply[1]['name'] %></p>
-      <% end %>
+    <hr/>
+    <% @comments.each do |comment| %>
+    <div>
+        <div class="card mb-2 shadow">
+            <div class="card-body">
+                <div class='row'>
+                    <h5 class="card-title col-1 text-start"><%= comment.user.name %>:</h5>
+                    <p class="card-text col-10 text-start"><%= comment.title %></p>
+                    <a href="#" class="btn btn-primary col-1">Like <span class='badge bg-danger'><%= comment.likes_count %></span> </a>
+                </div>
+                <hr/>
+                <%= form_with url: reply_comment_path(comment), method: :post, local: true do |form| %>
+                    <div class='row text-center'>
+                        <%= form.text_area :reply_content, placeholder: "Write a reply...", class: 'col-10' %>
+                        <%= form.hidden_field :user_id, value: 1 %> <!-- Assuming user ID is hardcoded for now -->
+                        <%= form.submit "Reply", class: 'btn btn-info col-2' %>
+                    </div>
+                <% end %>
+
+                <% if comment.replies.present? %>
+                    <% comment.replies.each do |reply| %>
+                        <p class="text-start"><strong><%= User.find(comment.user_id).name %>:</strong> <%= reply[1]['name'] %></p>
+                    <% end %>
+                <% end %>
+            </div>
+        </div>
+    </div>
     <% end %>
-  </div>
-<% end %>
+</div>
+
