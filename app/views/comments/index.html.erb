@@ -1,0 +1,25 @@
+<h1>Comments</h1>
+
+<%= form_with model: @new_comment, local: true do |form| %>
+  <%#= form.text_area :content, placeholder: "Write a comment..." %>
+  <%= form.hidden_field :user_id, value: 1 %> <!-- Assuming user ID is hardcoded for now -->
+  <%= form.submit "Add Comment" %>
+<% end %>
+
+<% @comments.each do |comment| %>
+  <div>
+    <p><strong><%= comment.user.name %>:</strong> <%= comment.id %></p>
+    
+    <%= form_with url: reply_comment_path(comment), method: :post, local: true do |form| %>
+      <%= form.text_area :reply_content, placeholder: "Write a reply..." %>
+      <%= form.hidden_field :user_id, value: 1 %> <!-- Assuming user ID is hardcoded for now -->
+      <%= form.submit "Reply" %>
+    <% end %>
+
+    <% if comment.replies.present? %>
+      <% comment.replies.each do |reply| %>
+        <p style="margin-left: 20px;"><strong><%= User.find(comment.user_id).name %>:</strong> <%= reply[1]['name'] %></p>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
