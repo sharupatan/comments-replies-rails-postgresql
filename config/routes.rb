@@ -5,4 +5,11 @@ Rails.application.routes.draw do
       post 'reply'
     end
   end
+
+  namespace :api do
+    namespace :v1 do
+      resources :user_followers, only: [:index, :create]
+      delete '/user_followers', to: 'user_followers#destroy'
+    end
+  end
 end

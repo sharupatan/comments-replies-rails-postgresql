@@ -55,3 +55,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'uuid', '~> 2.3', '>= 2.3.8'
 gem 'bootstrap', '~> 5.2', '>= 5.2.3'
 gem 'jquery'
+gem 'active_model_serializers'
