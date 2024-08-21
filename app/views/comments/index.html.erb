@@ -1,7 +1,7 @@
 <h1 class="text-center mb-5">Comments</h1>
 
 <div class="container m-auto text-center">
-    <%= form_with model: @new_comment, local: true do |form| %>
+    <%= form_with model: @new_comment, local: true, id: 'new-comment-form' do |form| %>
         <%= form.text_area :title, placeholder: "Write a comment...", class: 'form-control' %>
         <%= form.hidden_field :user_id, value: 1 %> <!-- Assuming user ID is hardcoded for now -->
         <%= form.submit "Add Comment", class: 'btn btn-primary mt-2 mb-1' %>
@@ -9,11 +9,11 @@
 
     <hr/>
     <% @comments.each do |comment| %>
-    <div>
+    <div id="comments-section">
         <div class="card mb-2 shadow">
             <div class="card-body">
                 <div class='row'>
-                    <h5 class="card-title col-1 text-start"><%= comment.user.name %>:</h5>
+                    <h5 class="card-title col-1 text-start"><%= comment.id %>:</h5>
                     <p class="card-text col-10 text-start"><%= comment.title %></p>
                     <a href="#" class="btn btn-primary col-1">Like <span class='badge bg-danger'><%= comment.likes_count %></span> </a>
                 </div>
@@ -37,3 +37,11 @@
     <% end %>
 </div>
 
+<script>
+  document.getElementById('new-comment-form').onsubmit = function(event) {
+    const title = event.target[1].value; // Assuming you have a title field in index 1
+    const userId = 1; // Replace with actual user ID
+    commentsChannel.sendComment(userId, title);
+    return false
+  };
+</script>

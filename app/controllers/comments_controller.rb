@@ -8,9 +8,10 @@ class CommentsController < ApplicationController
         # here the user_id should be taken from the current user
         @comment = Comment.new(comment_params)
         if @comment.save
-            redirect_to comments_path, notice: 'Comment was successfully created.'
+            # Instead of redirecting, you can broadcast the comment here if needed
+            ActionCable.server.broadcast("comments_channel", {comment: @comment})
+            head :ok # Respond with HTTP 200 OK
         else
-            @comments = Comment.includes(:user).all
             render :index
         end
     end
